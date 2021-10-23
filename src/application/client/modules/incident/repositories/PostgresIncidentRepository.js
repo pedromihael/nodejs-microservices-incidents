@@ -16,7 +16,11 @@ function PostgresIncidentRepository() {
   const findById = async id => {
     try {
       const result = await knex('incident').where({ id })
-      return result[0]
+      if (result.length) {
+        return result[0]
+      } else {
+        return null
+      }
     } catch (error) {
       return errorFactory.createError(error, 'findIncidentById')
     }

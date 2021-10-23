@@ -16,12 +16,18 @@ router.get('/', async (req, res) => {
   const listAllIncidentsUseCase = ListAllIncidentsUseCase(repository)
   const response = await listAllIncidentsUseCase.execute()
 
+  if (response.isApiError) res.status(response.code).send(response)
+  
+  else res.send(response)
+
   res.send(response)
 })
 
 router.get('/:id', async (req, res) => {
   const getIncidentByIdUseCase = GetIncidentByIdUseCase(repository)
   const response = await getIncidentByIdUseCase.execute(req.params.id)
+
+  if(!response) res.status(404).send({ok: false, message: 'not found'})
 
   if (response.isApiError) res.status(response.code).send(response)
   
@@ -42,8 +48,9 @@ router.put('/:id', async (req, res) => {
   const updateIncidentUseCase = UpdateIncidentUseCase(repository)
   const response = await updateIncidentUseCase.execute(req.params.id, data)
 
-  res.send(response)
-})
+  if (response.isApiError) res.status(response.code).send(response)
+  
+  else res.send(response)})
 
 router.delete('/:id', async (req, res) => {
   const deleteIncidentUseCase = DeleteIncidentUseCase(repository)
