@@ -26,7 +26,6 @@ function PostgresIncidentRepository() {
     try {
       const { description, fk_severity, fk_project, id } = data
       await knex('incident').insert({ description, fk_severity, fk_project, id })
-  
 
       // this should be sent to projects and providers with kafka
 
