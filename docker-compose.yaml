@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    command: sh -c "knex migrate:latest --knexfile src/infra/db/adapters/knex/knexfile.js && yarn dev"
+    environment:
+      - POSTGRES_DB=ms_incidents
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=postgres
+      - NODE_ENV=development
+      - PORT=3001
+    deploy:
+       restart_policy:
+        condition: on-failure
+        max_attempts: 5
+    depends_on: 
+      - postgres
+    volumes:
+      - .:/usr/app
+      
+  postgres:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DATABASE=ms_incidents
+    user: postgres
+    volumes:
+      - database:/var/lib/postgresql/data
+      - ./db:/docker-entrypoint-initdb.d/
+    ports:
+      - "5434:5432"
+    restart: always
+      
+    
+volumes:
+  database:
