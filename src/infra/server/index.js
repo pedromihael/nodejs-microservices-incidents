@@ -12,11 +12,12 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true}))
 app.use(logger('dev'))
-app.use(routes)
 
 app.get('/health-check', (req, res) => {
   res.status(200).send("Wow, our meeting could not be an incident at all 😏")
 })
+
+app.use(routes)
 
 app.listen(process.env.PORT || 3001, () => {
   console.log('Incidents service is ready ✅');
