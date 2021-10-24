@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3001:3001"
-    command: sh -c "knex migrate:latest --knexfile src/infra/db/adapters/knex/knexfile.js && yarn dev"
+    command: sh -c "knex migrate:latest --knexfile src/infra/db/adapters/knex/knexfile.js && yarn start"
     environment:
       - POSTGRES_DB=ms_incidents
       - POSTGRES_USER=postgres
