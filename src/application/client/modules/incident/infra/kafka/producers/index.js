@@ -1,7 +1,7 @@
 const { Kafka, logLevel } = require('kafkajs');
 
 const kafka = new Kafka({
-  clientId: 'api',
+  clientId: 'incidents-issuer',
   brokers: ['localhost:9092'],
   logLevel: logLevel.WARN,
   retry: {

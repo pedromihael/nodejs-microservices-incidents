@@ -34,16 +34,9 @@ function PostgresIncidentRepository() {
       await kafkaProducer.send({
         topic: 'update-project-reliability',
         messages: [
-          { value: JSON.stringify({ fk_severity, fk_project }) },
+          {key: 'new_incident', value: `${fk_project}::${fk_severity}`}
         ],
       })
-
-      // await kafkaProducer.send({
-      //   topic: 'update-provider-reliability',
-      //   messages: [
-      //     { value: JSON.stringify({ fk_severity, fk_project }) },
-      //   ],
-      // })
   
       return { ok: true }
     } catch (error) {
