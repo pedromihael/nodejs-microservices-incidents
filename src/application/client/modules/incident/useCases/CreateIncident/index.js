@@ -3,9 +3,9 @@ const ApiErrorFactory = require('../../../../../../shared/factories/ApiErrorFact
 const apiErrorFactory = ApiErrorFactory()
 
 function CreateIncidentUseCase(repository) {
-  const execute = async data => {
-    if (data) {
-      const response = await repository.create(data)
+  const execute = async (data, producer) => {
+    if (data && producer) {
+      const response = await repository.create(data, producer)
       return response
     } else {
       return apiErrorFactory.createError(

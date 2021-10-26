@@ -36,7 +36,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const createIncidentUseCase = CreateIncidentUseCase(repository)
-  const response = await createIncidentUseCase.execute(req.body)
+  const response = await createIncidentUseCase.execute(req.body, req.producer)
 
   if (response.isApiError) res.status(response.code).send(response)
   

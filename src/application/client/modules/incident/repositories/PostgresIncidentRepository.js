@@ -26,16 +26,24 @@ function PostgresIncidentRepository() {
     }
   }
   
-  const create = async data => {
+  const create = async (data, kafkaProducer) => {
     try {
       const { description, fk_severity, fk_project, id } = data
       await knex('incident').insert({ description, fk_severity, fk_project, id })
 
-      // this should be sent to projects and providers with kafka
+      await kafkaProducer.send({
+        topic: 'update-project-reliability',
+        messages: [
+          { value: JSON.stringify({ fk_severity, fk_project }) },
+        ],
+      })
 
-      // const incidentsByProject = await getIncidentsByProject(fk_project)
-      // await projectsModel.updateReliability(fk_project, fk_severity, incidentsByProject, 'create')
-      // await providerModel.updateReliability(fk_project)
+      // await kafkaProducer.send({
+      //   topic: 'update-provider-reliability',
+      //   messages: [
+      //     { value: JSON.stringify({ fk_severity, fk_project }) },
+      //   ],
+      // })
   
       return { ok: true }
     } catch (error) {
