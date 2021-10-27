@@ -48,16 +48,11 @@ function PostgresIncidentRepository() {
     try {
       const { field, value } = data
 
-      if (field === 'weight') {
-        // this should be sent to severities with kafka and calculated in each service
-      } 
-      
-      
-      await knex('incident')
-        .update({ [`${field}`]: value })
-        .where({ id });
-      
-  
+      if (field !== 'weight') {
+        await knex('incident')
+          .update({ [`${field}`]: value })
+          .where({ id });
+      }
       return { ok: true };
     } catch (error) {
       console.log('error', error);
@@ -68,12 +63,6 @@ function PostgresIncidentRepository() {
   const remove = async id => {
     try {  
       await knex('incident').where({ id }).delete();
-  
-      // this should be sent to severities with kafka and calculated in each service
-
-      // await projectsModel.updateReliability(fk_project, fk_severity, incidentsByProject, 'delete');
-      // await providerModel.updateReliability(fk_project);
-  
       return { ok: true };
     } catch (error) {
       return errorFactory.createError(error, 'deleteIncident');
